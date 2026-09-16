@@ -35,6 +35,12 @@ public class SimulationManager : MonoBehaviour
     }
 
     void Start()
+    {
+        CreateTestSurvivors();
+        timeManager.AdvanceHours(5);
+    }
+
+    void CreateTestSurvivors()
     { 
         // Created temporary test survivors for testing the simulation systems. 
         // Later, survivors should be created through a dedicated SurvivorGenerator or Loaded from saved game data.
@@ -50,7 +56,7 @@ public class SimulationManager : MonoBehaviour
 
         Survivor andrea = new Survivor();
         andrea.Name = "Andrea";
-        andrea.Occupation = "SoftwareEngineer";
+        andrea.Occupation = "Software Engineer";
         andrea.Health = 100;
         andrea.Hunger = 50;
         andrea.Energy = 100;
@@ -66,16 +72,6 @@ public class SimulationManager : MonoBehaviour
         joshua.Energy = 90;
         joshua.Stress = 60;
         survivors.Add(joshua);
-
-        // Test the simulation by advancing time and observing survivor actions.
-        Debug.Log("Maria's energy before the hour:");
-        Debug.Log(maria.Energy);
-
-        timeManager.AdvanceHours(5);
-
-        Debug.Log("Maria's current action: " + maria.CurrentAction);
-        Debug.Log("Maria's energy after the hour:");
-        Debug.Log(maria.Energy);
     }
 
     void HandleHourPassed()
