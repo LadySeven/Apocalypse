@@ -25,9 +25,9 @@ using UnityEngine;
 
 public class SimulationManager : MonoBehaviour
 {
-    List<Survivor> survivors = new List<Survivor>();
+    private List<Survivor> survivors = new List<Survivor>();
     public TimeManager timeManager;
-    SurvivorDecisionMaker decisionMaker = new SurvivorDecisionMaker();
+    private SurvivorDecisionMaker decisionMaker = new SurvivorDecisionMaker();
 
     void Awake()
     {
