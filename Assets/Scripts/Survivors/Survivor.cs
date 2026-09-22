@@ -81,6 +81,15 @@ public class Survivor
         }
     }
 
+    public void Eat()
+    {
+        Hunger -= 30;
+        if(Hunger < MinValue) 
+        {
+            Hunger = MinValue;
+        }
+    }
+
     public bool IsHungry()
     {
         return Hunger >= HungryThreshold;

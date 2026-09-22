@@ -40,11 +40,11 @@ public class SurvivorDecisionMaker
      * 2. Tiredness.
      * 3. Otherwise work.
      */
-    public SurvivorAction DecideAction(Survivor survivor)
+    public SurvivorAction DecideAction(Survivor survivor, ResourceManager resourceManager)
     {
-        if (survivor.IsVeryHungry())
+        if (survivor.IsVeryHungry() && resourceManager.Food > 0)
         {
-            return SurvivorAction.Idle;
+            return SurvivorAction.Eat;
         }
 
         if (survivor.IsTired())

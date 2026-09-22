@@ -14,4 +14,5 @@ public enum SurvivorAction
     Rest,
     Work,
     Explore,
+    Eat,
 }

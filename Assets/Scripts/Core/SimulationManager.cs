@@ -28,6 +28,8 @@ public class SimulationManager : MonoBehaviour
     private List<Survivor> survivors = new List<Survivor>();
     public TimeManager timeManager;
     private SurvivorDecisionMaker decisionMaker = new SurvivorDecisionMaker();
+    private ResourceManager resourceManager = new ResourceManager();
+
 
     void Awake()
     {
@@ -79,14 +81,18 @@ public class SimulationManager : MonoBehaviour
         foreach (var survivor in survivors)
         {
             survivor.PassHour();
-            survivor.CurrentAction = decisionMaker.DecideAction(survivor);
+            survivor.CurrentAction = decisionMaker.DecideAction(survivor, resourceManager);
             ExecuteAction(survivor);
 
             Debug.Log(
                 survivor.Name +
                 " | Energy: " + survivor.Energy +
                 " | Hunger: " + survivor.Hunger +
-                " | Current Action: " + survivor.CurrentAction
+                " | Current Action: " + survivor.CurrentAction +
+                " | Food: " + resourceManager.Food +
+                " | Water: " + resourceManager.Water +
+                " | Medicine: " + resourceManager.Medicine +
+                " | Materials: " + resourceManager.Materials
             );
         }
     }
@@ -108,6 +114,17 @@ public class SimulationManager : MonoBehaviour
     {
         switch (survivor.CurrentAction)
         {
+            case SurvivorAction.Eat:
+                if(resourceManager.ConsumeFood(1))
+                {
+                    survivor.Eat();
+                    Debug.Log(survivor.Name + " is eating.");
+                }
+                else
+                {
+                    Debug.Log(survivor.Name + " wanted to eat, but there is no food available.");
+                }
+                break;
             case SurvivorAction.Idle:
                 Debug.Log(survivor.Name + " is idle.");
                 break;
