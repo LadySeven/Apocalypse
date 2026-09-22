@@ -21,4 +21,15 @@ public class ResourceManager
         return true;
     }
 
+    public bool ConsumeWater(int amount)
+    {
+        if (Water < amount)
+        {
+            return false;
+        }
+        
+        Water -= amount;
+        return true;
+    }
+
 }

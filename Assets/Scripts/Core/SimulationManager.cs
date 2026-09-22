@@ -51,6 +51,7 @@ public class SimulationManager : MonoBehaviour
         maria.Occupation = "Nurse";
         maria.Health = 100;
         maria.Hunger = 80;
+        maria.Thirst = 80;
         maria.Energy = 80;
         maria.Stress = 10;
         survivors.Add(maria);
@@ -61,6 +62,7 @@ public class SimulationManager : MonoBehaviour
         andrea.Occupation = "Software Engineer";
         andrea.Health = 100;
         andrea.Hunger = 50;
+        andrea.Thirst = 20;
         andrea.Energy = 100;
         andrea.Stress = 80;
         survivors.Add(andrea);
@@ -71,6 +73,7 @@ public class SimulationManager : MonoBehaviour
         joshua.Occupation = "IT Specialist";
         joshua.Health = 100;
         joshua.Hunger = 30;
+        joshua.Thirst = 30;
         joshua.Energy = 90;
         joshua.Stress = 60;
         survivors.Add(joshua);
@@ -88,6 +91,7 @@ public class SimulationManager : MonoBehaviour
                 survivor.Name +
                 " | Energy: " + survivor.Energy +
                 " | Hunger: " + survivor.Hunger +
+                " | Thirst: " + survivor.Thirst +
                 " | Current Action: " + survivor.CurrentAction +
                 " | Food: " + resourceManager.Food +
                 " | Water: " + resourceManager.Water +
@@ -123,6 +127,17 @@ public class SimulationManager : MonoBehaviour
                 else
                 {
                     Debug.Log(survivor.Name + " wanted to eat, but there is no food available.");
+                }
+                break;
+            case SurvivorAction.Drink:
+                if(resourceManager.ConsumeWater(1))
+                {
+                    survivor.Drink();
+                    Debug.Log(survivor.Name + " is drinking.");
+                }
+                else
+                {
+                    Debug.Log(survivor.Name + " wanted to drink, but there is no water available.");
                 }
                 break;
             case SurvivorAction.Idle:

@@ -41,7 +41,11 @@ public class SurvivorDecisionMaker
      * 3. Otherwise work.
      */
     public SurvivorAction DecideAction(Survivor survivor, ResourceManager resourceManager)
-    {
+    {   
+        if (survivor.IsVeryThirsty() && resourceManager.Water > 0)
+        {
+            return SurvivorAction.Drink;
+        }
         if (survivor.IsVeryHungry() && resourceManager.Food > 0)
         {
             return SurvivorAction.Eat;

@@ -32,6 +32,8 @@ public class Survivor
 
     public const int HungryThreshold = 40;
     public const int VeryHungryThreshold = 80;
+    public const int ThirstyThreshold = 40;
+    public const int VeryThirstyThreshold = 80;
     public const int TiredThreshold = 40;
 
     public string Name;
@@ -39,6 +41,7 @@ public class Survivor
     
     public int Health;
     public int Hunger;
+    public int Thirst;
     public int Energy;
     public int Stress;
 
@@ -49,11 +52,17 @@ public class Survivor
     public void PassHour()
     {
         Hunger += 5;
+        Thirst += 5;
         Energy -= 5;
 
         if(Hunger > MaxValue) 
         {
             Hunger = MaxValue;
+        }
+
+        if(Thirst > MaxValue)
+        {
+            Thirst = MaxValue;
         }
 
         if(Energy < MinValue) 
@@ -90,9 +99,28 @@ public class Survivor
         }
     }
 
+    public void Drink()
+    {
+        Thirst -= 30;
+        if(Thirst < MinValue) 
+        {
+            Thirst = MinValue;
+        }
+    }
+
     public bool IsHungry()
     {
         return Hunger >= HungryThreshold;
+    }
+
+    public bool IsThirsty()
+    {
+        return Thirst >= ThirstyThreshold;
+    }
+
+    public bool IsVeryThirsty()
+    {
+        return Thirst >= VeryThirstyThreshold;
     }
 
     /* Determines whether hunger has reached a critical level.
