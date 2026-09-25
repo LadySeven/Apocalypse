@@ -31,6 +31,8 @@ public class SimulationManager : MonoBehaviour
     private ResourceManager resourceManager = new ResourceManager();
     private OutbreakManager outbreakManager = new OutbreakManager();
 
+    private WorldManager worldManager = new WorldManager();
+
 
     void Awake()
     {
@@ -40,6 +42,9 @@ public class SimulationManager : MonoBehaviour
     void Start()
     {
         CreateTestSurvivors();
+        worldManager.CreateTestWorld();
+        DisplayWorldLocations();
+        TestLocalResourceTransfer();
         timeManager.AdvanceHours(5);
     }
 
@@ -78,6 +83,46 @@ public class SimulationManager : MonoBehaviour
         joshua.Energy = 90;
         joshua.Stress = 60;
         survivors.Add(joshua);
+    }
+
+    void DisplayWorldLocations()
+    {
+        foreach (Location location in worldManager.Locations)
+        {
+            Debug.Log(
+                "Location: " + location.Name +
+                " | Type: " + location.Type +
+                " | Food: " + location.Food +
+                " | Water: " + location.Water +
+                " | Medicine: " + location.Medicine +
+                " | Materials: " + location.Materials
+            );
+        }
+    }
+
+    void TestLocalResourceTransfer()
+    {
+        Location generalStore = worldManager.Locations[0];
+        int foodToTake = 10;
+
+        Debug.Log(
+            "BEFORE TRANSFER" +
+            " | Store Food: " + generalStore.Food +
+            " | Settlement Food: " + resourceManager.Food
+        );
+
+        if (generalStore.TakeFood(foodToTake))
+        {
+            resourceManager.AddFood(foodToTake);
+            Debug.Log(
+                "Transferred " + foodToTake + " food from " + generalStore.Name +
+                " to the settlement. Settlement now has " + resourceManager.Food + " food."
+            );
+        }
+        else
+        {
+            Debug.Log("Transfer failed. " + generalStore.Name + " does not have enough Food.");
+        }
     }
 
 
