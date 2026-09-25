@@ -50,9 +50,9 @@ public class SimulationManager : MonoBehaviour
         maria.Name = "Maria";
         maria.Occupation = "Nurse";
         maria.Health = 100;
-        maria.Hunger = 80;
+        maria.Hunger = 90;
         maria.Thirst = 80;
-        maria.Energy = 80;
+        maria.Energy = 40;
         maria.Stress = 10;
         survivors.Add(maria);
 
@@ -79,12 +79,33 @@ public class SimulationManager : MonoBehaviour
         survivors.Add(joshua);
     }
 
+
+     /* Called every time TimeManager reports that one in-game hour has passed.
+     * For every survivor:
+     *   1. Update their needs.
+     *   2. Ask the decision maker what they want to do.
+     *   3. Store their selected action.
+     *   4. Display the utility scores used for the decision.
+     *   5. Execute the action.
+     *   6. Display the resulting survivor and resource state.
+     */
     void HandleHourPassed()
     {
         foreach (var survivor in survivors)
         {
             survivor.PassHour();
-            survivor.CurrentAction = decisionMaker.DecideAction(survivor, resourceManager);
+            SurvivorDecision decision = decisionMaker.DecideAction(survivor, resourceManager);
+            survivor.CurrentAction = decision.SelectedAction;
+            
+            Debug.Log(
+                survivor.Name +
+                " Utility Scores: " +
+                " | Eat: " + decision.EatScore +
+                " | Drink: " + decision.DrinkScore +
+                " | Rest: " + decision.RestScore +
+                " | Selected: " + decision.SelectedAction
+            );
+
             ExecuteAction(survivor);
 
             Debug.Log(

@@ -118,18 +118,23 @@ public class Survivor
         return Thirst >= ThirstyThreshold;
     }
 
+    /* Determines whether thirst has reached a severe level.
+     *
+     * This is not currently used by the basic utility decision
+     * system, but may later be used for dehydration effects,
+     * emergency behavior, health penalties, or other consequences.
+     */
     public bool IsVeryThirsty()
     {
         return Thirst >= VeryThirstyThreshold;
     }
 
-    /* Determines whether hunger has reached a critical level.
-     *
-     * Currently this causes the decision maker to select Idle,
-     * because the game does not yet have a food/resource system.
-     *
-     * Later this could instead cause the survivor to seek food.
-     */
+   /* Determines whether hunger has reached a severe level.
+    *
+    * This is not currently used by the basic utility decision
+    * system, but may later be used for starvation effects,
+    * emergency behavior, health penalties, or other consequences.
+    */
     public bool IsVeryHungry()
     {
         return Hunger >= VeryHungryThreshold;
