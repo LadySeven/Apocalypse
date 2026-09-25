@@ -29,6 +29,7 @@ public class SimulationManager : MonoBehaviour
     public TimeManager timeManager;
     private SurvivorDecisionMaker decisionMaker = new SurvivorDecisionMaker();
     private ResourceManager resourceManager = new ResourceManager();
+    private OutbreakManager outbreakManager = new OutbreakManager();
 
 
     void Awake()
@@ -91,6 +92,16 @@ public class SimulationManager : MonoBehaviour
      */
     void HandleHourPassed()
     {
+        // This is placed not inside the loop because this is a world state,
+        // not something belonging to any survivors.
+        outbreakManager.UpdateOutbreak(timeManager.currentDay);
+        Debug.Log(
+            "World State" +
+            " | Day: " + timeManager.currentDay +
+            " | Hour: " + timeManager.currentHour +
+            " | Outbreak: " + outbreakManager.CurrentLevel
+        );
+
         foreach (var survivor in survivors)
         {
             survivor.PassHour();

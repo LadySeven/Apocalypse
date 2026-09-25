@@ -23,7 +23,7 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public int currentDay = 1;
-    public int currentHour = 22;
+    public int currentHour = 8;
     // Event to notify  whenever one in-game hour has passed.
     // Other systems can subscribe to this event to react to time changes.
     public event System.Action OnHourPassed;
