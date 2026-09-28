@@ -47,6 +47,9 @@ public class Survivor
 
     public SurvivorAction CurrentAction;
 
+    // Tracks whether this survivor is currently assigned to an expedition away from the settlement.
+    public bool IsOnExpedition = false;
+
     // Updates the survivor's needs as one in-game hour passes.
     // Future versions may include: Work Type, Activity, Food Consumption, Medical Conditions, Stress, etc.
     public void PassHour()

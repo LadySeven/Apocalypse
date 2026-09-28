@@ -32,7 +32,7 @@ public class SimulationManager : MonoBehaviour
     private OutbreakManager outbreakManager = new OutbreakManager();
 
     private WorldManager worldManager = new WorldManager();
-
+    private ExplorationManager explorationManager = new ExplorationManager();
 
     void Awake()
     {
@@ -44,7 +44,7 @@ public class SimulationManager : MonoBehaviour
         CreateTestSurvivors();
         worldManager.CreateTestWorld();
         DisplayWorldLocations();
-        TestLocalResourceTransfer();
+        TestExpedition();
         timeManager.AdvanceHours(5);
     }
 
@@ -100,31 +100,31 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
-    void TestLocalResourceTransfer()
+    /*
+    * Creates our temporary NPC expedition.
+    *
+    * Maria is assigned to Greenfield General Store.
+    * this method does NOT manually advance or complete the expedition.
+    *
+    * The expedition will progress automatically as game hours pass.
+    */
+    void TestExpedition()
     {
+        Survivor maria = survivors[0];
         Location generalStore = worldManager.Locations[0];
-        int foodToTake = 10;
+
+        Expedition expedition = new Expedition(maria, generalStore);
+        explorationManager.StartExpedition(expedition);
 
         Debug.Log(
-            "BEFORE TRANSFER" +
+            "EXPEDITION STARTED" +
+            " | Survivor: " + expedition.Survivor.Name +
+            " | Target: " + expedition.TargetLocation.Name +
+            " | State: " + expedition.State +
             " | Store Food: " + generalStore.Food +
             " | Settlement Food: " + resourceManager.Food
         );
-
-        if (generalStore.TakeFood(foodToTake))
-        {
-            resourceManager.AddFood(foodToTake);
-            Debug.Log(
-                "Transferred " + foodToTake + " food from " + generalStore.Name +
-                " to the settlement. Settlement now has " + resourceManager.Food + " food."
-            );
-        }
-        else
-        {
-            Debug.Log("Transfer failed. " + generalStore.Name + " does not have enough Food.");
-        }
     }
-
 
      /* Called every time TimeManager reports that one in-game hour has passed.
      * For every survivor:
@@ -147,9 +147,40 @@ public class SimulationManager : MonoBehaviour
             " | Outbreak: " + outbreakManager.CurrentLevel
         );
 
-        foreach (var survivor in survivors)
+        // Progress all active NPC expeditions by one hour.
+        explorationManager.UpdateExpeditions(resourceManager);
+
+        // Displays the current state of every active expedition.
+        foreach (Expedition expedition in explorationManager.ActiveExpeditions)
+        {
+            Debug.Log(
+                "EXPEDITION UPDATE" +
+                " | Survivor: " + expedition.Survivor.Name +
+                " | Target: " + expedition.TargetLocation.Name +
+                " | State: " + expedition.State +
+                " | Food Collected: " + expedition.FoodCollected +
+                " | Settlement Food: " + resourceManager.Food
+            );
+        }
+
+        foreach (Survivor survivor in survivors)
         {
             survivor.PassHour();
+
+            if (survivor.IsOnExpedition)
+            {
+                Debug.Log(
+                    survivor.Name +
+                    " is currently away on an expedition." +
+                    " | Energy: " + survivor.Energy +
+                    " | Hunger: " + survivor.Hunger +
+                    " | Thirst: " + survivor.Thirst +
+                    " | Current Action: " + survivor.CurrentAction
+                );
+                // Stops processing the current item and move to the next one
+                continue;
+            }
+
             SurvivorDecision decision = decisionMaker.DecideAction(survivor, resourceManager);
             survivor.CurrentAction = decision.SelectedAction;
             
